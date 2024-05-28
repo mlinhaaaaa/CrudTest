@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -12,32 +16,24 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CrudTest</a>
+                <a id="logo" class="navbar-brand" href="@Url.Action("ChooseAction", "Home")">CrudTest</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Category</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="News" asp-action="Index">News</a>
-                        </li>
-                    </ul>
+                    <div id="categoryHeaderContainer">
+                        @await Html.PartialAsync("_CategoryHeader")
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            <div id="newsContainer">
+                <!-- News will be loaded here -->
+            </div>
             @RenderBody()
         </main>
     </div>
@@ -51,5 +47,38 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajax({
+                url: '@Url.Action("GetDataHeader", "Categories")',
+                type: 'GET',
+                success: function (data) {
+                    $('#categoryHeaderContainer').html(data);
+                    $('.category-link').on('click', function () {
+                        var categoryId = $(this).data('category-id');
+                        loadNewsByCategory(categoryId);
+                    });
+                },
+                error: function () {
+                    $('#categoryHeaderContainer').html('<p>Error loading categories.</p>');
+                }
+            });
+
+            function loadNewsByCategory(categoryId) {
+                $.ajax({
+                    url: '@Url.Action("GetNewsByCategory", "Categories")',
+                    type: 'GET',
+                    data: { categoryId: categoryId },
+                    success: function (data) {
+                        $('#newsContainer').html(data);
+                    },
+                    error: function () {
+                        $('#newsContainer').html('<p>Error loading news.</p>');
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>

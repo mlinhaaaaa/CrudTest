@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Dashboad";
+}
+
+<div class="container">
+    <h2>Dashboad</h2>
+    <button id="btnCategories" class="btn btn-primary">Categories</button>
+    <button id="btnNews" class="btn btn-secondary">News</button>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#btnCategories').on('click', function () {
+            window.location.href = '@Url.Action("", "Categories")';
+        });
+
+        $('#btnNews').on('click', function () {
+            window.location.href = '@Url.Action("", "News")';
+        });
+    });
+</script>

@@ -1,0 +1,20 @@
+﻿@model IEnumerable<CrudTest.Entities.News>
+
+<div>
+    @if (Model != null && Model.Any())
+    {
+        <ul>
+            @foreach (var news in Model)
+            {
+                <li>
+                    <h3>@news.Name</h3>
+                    <p>@news.Content</p>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No news available for this category.</p>
+    }
+</div>
