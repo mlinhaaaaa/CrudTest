@@ -1,0 +1,174 @@
+﻿@model IEnumerable<CrudTest.Entities.News>
+
+@{
+    ViewData["Title"] = "Index";
+    var i = 0;
+    var category = ViewData["Category"] as IEnumerable<CrudTest.Entities.Category>;
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<h1>Index</h1>
+
+<p>
+    <a data-bs-toggle="modal" data-bs-target="#exampleModal">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Content</th>
+            <th scope="col">Category</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            i++;
+            <tr>
+                <th scope="row">@i</th>
+                <td>@item.Name</td>
+                <td>@item.Content</td>
+                <td>@item.CategoryNavigation.Name</td>
+                <td><a data-bs-toggle="modal" data-bs-target="#editModal" onclick="CheckinData('@item.Id','@item.Name','@item.Content','@item.Category')">Edit</a> || <a onclick="Delete('@item.Id')">Delete</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Create News</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Name:</label>
+                        <input type="text" class="form-control" id="name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">Content:</label>
+                        <textarea class="form-control" id="content"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">Category:</label>
+                        <select id="category" class="form-control">
+                            @foreach(var data in category)
+                            {
+                                <option value="@data.Id">@data.Name</option>
+                            }
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="PostData()" class="btn btn-primary">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Create News</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input type="hidden" class="form-control" id="id_edit">
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Name:</label>
+                        <input type="text" class="form-control" id="name_edit">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">Content:</label>
+                        <textarea class="form-control" id="content_edit"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">Category:</label>
+                        <select id="category_edit" class="form-control">
+                            @foreach (var data in category)
+                            {
+                                <option value="@data.Id">@data.Name</option>
+                            }
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" onclick="EditData()" class="btn btn-primary">Edit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function PostData(){
+        $.ajax({
+            url: "/News/Create",
+            type: "post",
+            data: {
+                "name": $("#name").val(),
+                "content": $("#content").val(),
+                "category": $("#category").val(),
+            },
+            success: function (response) {
+                window.location.reload();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        });
+    }
+
+    function EditData() {
+        $.ajax({
+            url: "/News/Edit",
+            type: "post",
+            data: {
+                "id": $("#id_edit").val(),
+                "name": $("#name_edit").val(),
+                "content": $("#content_edit").val(),
+                "category": $("#category_edit").val(),
+            },
+            success: function (response) {
+                window.location.reload();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        });
+    }
+
+    function Delete(id) {
+        $.ajax({
+            url: "/News/Delete",
+            type: "post",
+            data: {
+                "id": id,
+            },
+            success: function (response) {
+                window.location.reload();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        });
+    }
+    
+    function CheckinData(id ,name, content, category) {
+        $("#id_edit").val(id);
+        $("#name_edit").val(name);
+        $("#content_edit").val(content);
+        $("#category_edit").val(category);
+    }
+</script>
