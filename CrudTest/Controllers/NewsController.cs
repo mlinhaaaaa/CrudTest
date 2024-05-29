@@ -62,5 +62,22 @@ namespace CrudTest.Controllers
             _context.SaveChanges();
             return Ok();
         }
+
+        public async Task<IActionResult> Category(Guid id)
+        {
+            var category = await _context.Categories.FindAsync(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            var news = await _context.News
+                .Where(n => n.Category == id)
+                .Include(n => n.CategoryNavigation)
+                .ToListAsync();
+
+            ViewData["Category"] = category;
+            return View(news);
+        }
     }
 }

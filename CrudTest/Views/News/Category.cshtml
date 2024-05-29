@@ -1,0 +1,37 @@
+﻿@model IEnumerable<CrudTest.Entities.News>
+@{
+    var category = ViewData["Category"] as CrudTest.Entities.Category;
+    var i = 0;
+}
+
+<h1>News in @category.Name</h1>
+
+@if (!Model.Any())
+{
+    <p>No news available for this category.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Content</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                i++;
+                <tr>
+                    <td>@i</td>
+                    <td>@item.Name</td>
+                    <td>@item.Content</td>
+                    <td>@item.CategoryNavigation.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

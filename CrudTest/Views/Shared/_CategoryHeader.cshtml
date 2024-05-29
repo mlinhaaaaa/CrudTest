@@ -1,17 +1,19 @@
 ﻿@model IEnumerable<CrudTest.Entities.Category>
 
-@if (Model != null && Model.Any())
-{
+
+<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
     <ul class="navbar-nav flex-grow-1">
-        @foreach (var category in Model)
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+        </li>
+        @if (Model != null)
         {
-            <li class="nav-item">
-                <a class="nav-link text-dark category-link" data-category-id="@category.Id">@category.Name</a>
-            </li>
+            foreach (var category in Model)
+            {
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="News" asp-action="Category" asp-route-id="@category.Id">@category.Name</a>
+                </li>
+            }
         }
     </ul>
-}
-else
-{
-    <p>No categories available.</p>
-}
+</div>

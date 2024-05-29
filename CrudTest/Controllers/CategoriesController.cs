@@ -22,7 +22,7 @@ namespace CrudTest.Controllers
         public async Task<IActionResult> Index()
         {
             var categories = await _context.Categories.ToListAsync();
-            //ViewData["Category"] = categories;
+            ViewData["Category"] = categories;
             return View(categories);
         }
 

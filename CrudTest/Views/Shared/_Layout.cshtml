@@ -16,14 +16,14 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a id="logo" class="navbar-brand" href="@Url.Action("ChooseAction", "Home")">CrudTest</a>
+                <a id="logo" class="navbar-brand" href="@Url.Action("Dashboad", "Home")">CrudTest</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <div id="categoryHeaderContainer">
-                        @await Html.PartialAsync("_CategoryHeader")
+                        @await Html.PartialAsync("_CategoryHeader", (IEnumerable<CrudTest.Entities.Category>)ViewData["Categories"])
                     </div>
                 </div>
             </div>
