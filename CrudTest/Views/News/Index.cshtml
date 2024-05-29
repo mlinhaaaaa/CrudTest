@@ -29,7 +29,7 @@
                 <th scope="row">@i</th>
                 <td>@item.Name</td>
                 <td>@item.Content</td>
-                <td>@item.CategoryNavigation.Name</td>
+                <td>@item.CategoryNavigation?.Name</td>
                 <td><a data-bs-toggle="modal" data-bs-target="#editModal" onclick="CheckinData('@item.Id','@item.Name','@item.Content','@item.Category')">Edit</a> || <a onclick="Delete('@item.Id')">Delete</a></td>
             </tr>
         }

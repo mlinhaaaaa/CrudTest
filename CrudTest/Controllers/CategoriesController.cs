@@ -127,10 +127,15 @@ namespace CrudTest.Controllers
             var category = await _context.Categories.FindAsync(id);
             if (category != null)
             {
+                var newsList = await _context.News.Where(n => n.Category == id).ToListAsync();
+                foreach (var news in newsList)
+                {
+                    news.IsDeleted = true;
+                    _context.Update(news);
+                }
                 _context.Categories.Remove(category);
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
