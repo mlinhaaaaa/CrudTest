@@ -9,38 +9,176 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CrudTest</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="~/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/css/settings.css" />
+    <link rel="stylesheet" href="~/css/custom.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CrudTest.styles.css" asp-append-version="true" />
+
+    <!-- CSS STYLE-->
+    <link rel="stylesheet" type="text/css" href="css/style.css" media="screen">
+
+    <!-- SLIDER REVOLUTION 4.x CSS SETTINGS -->
+    <link rel="stylesheet" type="text/css" href="css/settings.css" media="screen">
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a id="logo" class="navbar-brand" href="@Url.Action("Dashboad", "Home")">CrudTest</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <div id="categoryHeaderContainer">
-                        @await Html.PartialAsync("_CategoryHeader", (IEnumerable<CrudTest.Entities.Category>)ViewData["Categories"])
+        <div class="container-fluid">
+
+            <!-- Slider -->
+            <div class="tp-banner-container">
+                <div class="tp-banner">
+                            <img src="~/images/slide.jpg" alt="slidebg1" data-bgfit="cover" data-bgposition="left top" data-bgrepeat="no-repeat" style="width: 100%">
+                </div>
+            </div>
+            <!-- //Slider -->
+            <div class="headernav">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-1 col-xs-3 col-sm-2 col-md-2 logo "><a><img src="~/images/logo.jpg" alt=""></a></div>
+                        <div class="col-lg-3 col-xs-9 col-sm-5 col-md-3 selecttopic">
+                            <div class="dropdown">
+                                <a data-toggle="dropdown" href="#">Borderlands 2</a> <b class="caret"></b>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Borderlands 1</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-2" href="#">Borderlands 2</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-3" href="#">Borderlands 3</a></li>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 search hidden-xs hidden-sm col-md-3">
+                            <div class="wrap">
+                                <form action="#" method="post" class="form">
+                                    <div class="pull-left txt"><input type="text" class="form-control" placeholder="Search Topics"></div>
+                                    <div class="pull-right"><button class="btn btn-default" type="button"><i class="fa fa-search"></i></button></div>
+                                    <div class="clearfix"></div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-xs-12 col-sm-7 col-md-5 avt">
+                            <div class="stnt pull-left" style="padding: 19px 10px ">
+                                <a class="btn btn-primary" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                <a class="btn btn-primary" href="@Url.Action("Dashboard", "Home")">Dashboard</a>
+                            </div>
+                            <div class="env pull-left" style="padding: 19px 10px "><i class="fa fa-envelope"></i></div>
+
+                            <div class="avatar pull-left dropdown" style="padding: 19px 10px ">
+                                <a data-toggle="dropdown" href="#"><img src="~/images/avatar.jpg" alt=""></a> <b class="caret"></b>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">My Profile</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-2" href="#">Inbox</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-3" href="#">Log Out</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-4" href="#">Create account</a></li>
+                                </ul>
+                            </div>
+
+                            <div class="clearfix"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </nav>
     </header>
     <div class="container">
         <main role="main" class="pb-3">
-            <div id="newsContainer">
-                <!-- News will be loaded here -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-md-">
+                        @RenderBody()
+                    </div>
+                    <div class="col-lg-4 col-md-4">
+                        <!-- -->
+                        <div class="sidebarblock">
+                            <h3>Categories</h3>
+                            <div class="divline"></div>
+                            <div class="blocktxt">
+                                <ul class="cats" id="categoryHeaderContainer">
+                                    <!-- Categories will be loaded here -->
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- -->
+                        <div class="sidebarblock">
+                            <h3>Poll of the Week</h3>
+                            <div class="divline"></div>
+                            <div class="blocktxt">
+                                <p>Which News you are reading today?</p>
+                                <form action="#" method="post" class="form">
+                                    <table class="poll">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar color1" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 90%">
+                                                            Call of Duty Ghosts
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="chbox">
+                                                    <input id="opt1" type="radio" name="opt" value="1">
+                                                    <label for="opt1"></label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar color2" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 63%">
+                                                            Titanfall
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="chbox">
+                                                    <input id="opt2" type="radio" name="opt" value="2" checked="">
+                                                    <label for="opt2"></label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="progress">
+                                                        <div class="progress-bar color3" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 75%">
+                                                            Battlefield 4
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="chbox">
+                                                    <input id="opt3" type="radio" name="opt" value="3">
+                                                    <label for="opt3"></label>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+                                <p class="smal">Voting ends on 19th of October</p>
+                            </div>
+                        </div>
+
+                        <!-- -->
+
+                    </div>
+                </div>
             </div>
-            @RenderBody()
         </main>
     </div>
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - CrudTest - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="row">
+                <div class="col-lg-1 col-xs-3 col-sm-2 logo "><a href="#"><img src="~/images/logo.jpg" alt=""></a></div>
+                <div class="col-lg-8 col-xs-9 col-sm-5 ">Copyrights 2014, websitename.com</div>
+                <div class="col-lg-3 col-xs-12 col-sm-5 sociconcent">
+                    <ul class="socialicons">
+                        <li><a href="#"><i class="fa fa-facebook-square"></i></a></li>
+                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                        <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+                        <li><a href="#"><i class="fa fa-cloud"></i></a></li>
+                        <li><a href="#"><i class="fa fa-rss"></i></a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

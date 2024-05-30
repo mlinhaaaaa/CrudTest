@@ -63,6 +63,15 @@ namespace CrudTest.Controllers
             return Ok();
         }
 
+
+        public IActionResult GetAllNews()
+        {
+            var allNews = _context.News.ToList();
+            return PartialView("_AllNews", allNews);
+        }
+
+
+
         public async Task<IActionResult> Category(Guid id)
         {
             var category = await _context.Categories.FindAsync(id);
@@ -79,5 +88,6 @@ namespace CrudTest.Controllers
             ViewData["Category"] = category;
             return View(news);
         }
+
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace CrudTest.Entities;
 
 public partial class TestContext : DbContext
@@ -44,10 +45,12 @@ public partial class TestContext : DbContext
             entity.HasOne(d => d.CategoryNavigation).WithMany(p => p.News)
                 .HasForeignKey(d => d.Category)
                 .HasConstraintName("FK__News__Category__398D8EEE");
-        });
+
+        }); 
 
         OnModelCreatingPartial(modelBuilder);
     }
+
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

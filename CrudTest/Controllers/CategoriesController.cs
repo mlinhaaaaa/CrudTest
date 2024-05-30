@@ -156,6 +156,32 @@ namespace CrudTest.Controllers
             var news = await _context.News.Where(n => n.Category == categoryId).ToListAsync();
             return PartialView("_NewsList", news);
         }
+        public IActionResult Category(int id)
+        {
+            var categoryId = id.ToString();
+            var category = _context.Categories
+                .Include(c => c.News)
+                .FirstOrDefault(c => c.Id.ToString() == categoryId);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            return View(category);
+        }
 
+        public IActionResult NewsCount()
+        {
+            var categories = _context.Categories
+                .Include(c => c.News)
+                .Select(c => new Category
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    NewsCount = c.News.Count() > 0 ? c.News.Count():0
+                })
+                .ToList();
+
+            return View(categories);
+        }
     }
 }

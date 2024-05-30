@@ -23,7 +23,7 @@ namespace CrudTest.Controllers
             return View();
         }
 
-        public IActionResult Dashboad()
+        public IActionResult Dashboard()
         {
             return View();
         }

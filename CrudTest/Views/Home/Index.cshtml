@@ -1,1 +1,24 @@
-﻿
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<h1>Welcome to our website!</h1>
+<div id="allNewsContainer"></div>
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: '@Url.Action("GetAllNews", "News")',
+                type: 'GET',
+                success: function (data) {
+                    $('#allNewsContainer').html(data);
+                },
+                error: function () {
+                    console.error('Failed to load news.');
+                }
+            });
+        });
+    </script>
+}

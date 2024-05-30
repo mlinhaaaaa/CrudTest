@@ -1,15 +1,21 @@
 ﻿@model IEnumerable<CrudTest.Entities.News>
+
 @{
     ViewData["Title"] = "Index";
     var i = 0;
     var category = ViewData["Category"] as IEnumerable<CrudTest.Entities.Category>;
 }
+
+<!-- Bootstrap CSS -->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+<!-- jQuery and Bootstrap JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
 
 <h1>News</h1>
 
 <p>
-    <a data-bs-toggle="modal" data-bs-target="#exampleModal">Create New</a>
+    <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -29,8 +35,11 @@
                 <th scope="row">@i</th>
                 <td>@item.Name</td>
                 <td>@item.Content</td>
-                <td>@item.CategoryNavigation?.Name</td>
-                <td><a data-bs-toggle="modal" data-bs-target="#editModal" onclick="CheckinData('@item.Id','@item.Name','@item.Content','@item.Category')">Edit</a> || <a onclick="Delete('@item.Id')">Delete</a></td>
+                <td>@item.CategoryNavigation.Name</td>
+                <td>
+                    <a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" onclick="CheckinData('@item.Id', '@item.Name', '@item.Content', '@item.Category')">Edit</a> ||
+                    <a class="btn btn-danger" onclick="Delete('@item.Id')">Delete</a>
+                </td>
             </tr>
         }
     </tbody>
@@ -46,17 +55,17 @@
             <div class="modal-body">
                 <form>
                     <div class="mb-3">
-                        <label for="recipient-name" class="col-form-label">Name:</label>
-                        <input type="text" class="form-control" id="name">
+                        <label for="modal-name" class="col-form-label">Name:</label>
+                        <input type="text" class="form-control" id="modal-name">
                     </div>
                     <div class="mb-3">
-                        <label for="message-text" class="col-form-label">Content:</label>
-                        <textarea class="form-control" id="content"></textarea>
+                        <label for="modal-content" class="col-form-label">Content:</label>
+                        <textarea class="form-control" id="modal-content"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="message-text" class="col-form-label">Category:</label>
-                        <select id="category" class="form-control">
-                            @foreach(var data in category)
+                        <label for="modal-category" class="col-form-label">Category:</label>
+                        <select id="modal-category" class="form-control">
+                            @foreach (var data in category)
                             {
                                 <option value="@data.Id">@data.Name</option>
                             }
@@ -72,27 +81,27 @@
     </div>
 </div>
 
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Create News</h5>
+                <h5 class="modal-title" id="editModalLabel">Edit News</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form>
-                    <input type="hidden" class="form-control" id="id_edit">
+                    <input type="hidden" class="form-control" id="modal-id-edit">
                     <div class="mb-3">
-                        <label for="recipient-name" class="col-form-label">Name:</label>
-                        <input type="text" class="form-control" id="name_edit">
+                        <label for="modal-name-edit" class="col-form-label">Name:</label>
+                        <input type="text" class="form-control" id="modal-name-edit">
                     </div>
                     <div class="mb-3">
-                        <label for="message-text" class="col-form-label">Content:</label>
-                        <textarea class="form-control" id="content_edit"></textarea>
+                        <label for="modal-content-edit" class="col-form-label">Content:</label>
+                        <textarea class="form-control" id="modal-content-edit"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="message-text" class="col-form-label">Category:</label>
-                        <select id="category_edit" class="form-control">
+                        <label for="modal-category-edit" class="col-form-label">Category:</label>
+                        <select id="modal-category-edit" class="form-control">
                             @foreach (var data in category)
                             {
                                 <option value="@data.Id">@data.Name</option>
@@ -109,16 +118,15 @@
     </div>
 </div>
 
-
 <script>
-    function PostData(){
+    function PostData() {
         $.ajax({
             url: "/News/Create",
             type: "post",
             data: {
-                "name": $("#name").val(),
-                "content": $("#content").val(),
-                "category": $("#category").val(),
+                name: $("#modal-name").val(),
+                content: $("#modal-content").val(),
+                category: $("#modal-category").val()
             },
             success: function (response) {
                 window.location.reload();
@@ -134,10 +142,10 @@
             url: "/News/Edit",
             type: "post",
             data: {
-                "id": $("#id_edit").val(),
-                "name": $("#name_edit").val(),
-                "content": $("#content_edit").val(),
-                "category": $("#category_edit").val(),
+                id: $("#modal-id-edit").val(),
+                name: $("#modal-name-edit").val(),
+                content: $("#modal-content-edit").val(),
+                category: $("#modal-category-edit").val()
             },
             success: function (response) {
                 window.location.reload();
@@ -152,9 +160,7 @@
         $.ajax({
             url: "/News/Delete",
             type: "post",
-            data: {
-                "id": id,
-            },
+            data: { id: id },
             success: function (response) {
                 window.location.reload();
             },
@@ -163,11 +169,11 @@
             }
         });
     }
-    
-    function CheckinData(id ,name, content, category) {
-        $("#id_edit").val(id);
-        $("#name_edit").val(name);
-        $("#content_edit").val(content);
-        $("#category_edit").val(category);
+
+    function CheckinData(id, name, content, category) {
+        $("#modal-id-edit").val(id);
+        $("#modal-name-edit").val(name);
+        $("#modal-content-edit").val(content);
+        $("#modal-category-edit").val(category);
     }
 </script>
