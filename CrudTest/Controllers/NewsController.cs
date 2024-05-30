@@ -7,7 +7,8 @@ namespace CrudTest.Controllers
     public class NewsController : Controller
     {
         private readonly TestContext _context;
-        public NewsController(TestContext context) {
+        public NewsController(TestContext context)
+        {
             _context = context;
         }
         public IActionResult Index()
@@ -67,7 +68,7 @@ namespace CrudTest.Controllers
         public IActionResult GetAllNews()
         {
             var allNews = _context.News.ToList();
-            return PartialView("_AllNews", allNews);
+            return View(allNews);
         }
 
 

@@ -177,7 +177,7 @@ namespace CrudTest.Controllers
                 {
                     Id = c.Id,
                     Name = c.Name,
-                    NewsCount = c.News.Count() > 0 ? c.News.Count():0
+                    NewsCount = c.News.Count() > 0 ? c.News.Count() : 0
                 })
                 .ToList();
 

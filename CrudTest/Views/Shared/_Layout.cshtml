@@ -40,8 +40,8 @@
                         <div class="col-lg-1 col-xs-3 col-sm-2 col-md-2 logo "><a><img src="~/images/logo.jpg" alt=""></a></div>
                         <div class="col-lg-3 col-xs-9 col-sm-5 col-md-3 selecttopic">
                             <div class="dropdown">
-                                <a data-toggle="dropdown" href="#">Borderlands 2</a> <b class="caret"></b>
-                                <ul class="dropdown-menu" role="menu">
+                                <a data-toggle="dropdown" onclick="toggleDropdown()" href="#">Borderlands 2</a> <b class="caret"></b>
+                                <ul class="dropdown-menu" role="menu" id="dropdownMenu" style="display:none">
                                     <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Borderlands 1</a></li>
                                     <li role="presentation"><a role="menuitem" tabindex="-2" href="#">Borderlands 2</a></li>
                                     <li role="presentation"><a role="menuitem" tabindex="-3" href="#">Borderlands 3</a></li>
@@ -65,9 +65,9 @@
                             </div>
                             <div class="env pull-left" style="padding: 19px 10px "><i class="fa fa-envelope"></i></div>
 
-                            <div class="avatar pull-left dropdown" style="padding: 19px 10px ">
-                                <a data-toggle="dropdown" href="#"><img src="~/images/avatar.jpg" alt=""></a> <b class="caret"></b>
-                                <ul class="dropdown-menu" role="menu">
+                            <div class="avatar pull-left dropdown" style="padding: 19px  ">
+                                <a href="#" onclick="toggleDropdown()" id="avatarDropdown"><img src="~/images/avatar.jpg" alt=""></a> <b class="caret"></b>
+                                <ul class="dropdown-menu" role="menu" id="dropdownMenu" style="display:none">
                                     <li role="presentation"><a role="menuitem" tabindex="-1" href="#">My Profile</a></li>
                                     <li role="presentation"><a role="menuitem" tabindex="-2" href="#">Inbox</a></li>
                                     <li role="presentation"><a role="menuitem" tabindex="-3" href="#">Log Out</a></li>
@@ -217,6 +217,16 @@
                 });
             }
         });
+    </script>
+    <script>
+        function toggleDropdown() {
+            var dropdownMenu = document.getElementById("dropdownMenu");
+            if (dropdownMenu.style.display === "none") {
+                dropdownMenu.style.display = "block";
+            } else {
+                dropdownMenu.style.display = "none";
+            }
+        }
     </script>
 </body>
 </html>

@@ -1,24 +1,46 @@
-﻿@{
-    ViewData["Title"] = "Home";
+﻿@model List<CrudTest.Entities.News>
+@{
+    var random = new Random();
 }
 
-<h1>Welcome to our website!</h1>
-<div id="allNewsContainer"></div>
-
-@section Scripts {
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $.ajax({
-                url: '@Url.Action("GetAllNews", "News")',
-                type: 'GET',
-                success: function (data) {
-                    $('#allNewsContainer').html(data);
-                },
-                error: function () {
-                    console.error('Failed to load news.');
-                }
-            });
-        });
-    </script>
+@if (Model != null && Model.Any())
+{
+    foreach (var news in Model)
+    {
+        var views = random.Next(100, 10000);
+        var time = random.Next(1, 60);
+        var comments = random.Next(50, 600);
+        <div class="post">
+            <div class="wrap-ut pull-left">
+                <div class="userinfo pull-left">
+                    <div class="avatar">
+                        <img src="~/images/avatar.jpg" alt="">
+                        <div class="status green"> &nbsp;</div>
+                    </div>
+                    <div class="icons">
+                        <img src="~/images/icon1.jpg" alt=""><img src="~/images/icon4.jpg" alt="">
+                    </div>
+                </div>
+                <div class="posttext pull-left">
+                    <h2>@news.Name</h2>
+                    <p>@news.Content</p>
+                </div>
+            </div>
+            <div class="postinfo pull-left">
+                <div class="comments">
+                    <div class="commentbg">
+                        @comments
+                        <div class="mark"></div>
+                    </div>
+                </div>
+                <div class="views"><i class="fa fa-eye"></i> @views</div>
+                <div class="time"><i class="fa fa-clock-o"></i> @time min</div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    }
+}
+else
+{
+    <p>No news available.</p>
 }
