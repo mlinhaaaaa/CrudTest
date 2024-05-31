@@ -1,6 +1,7 @@
 using CrudTest.Entities;
 using CrudTest.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace CrudTest.Controllers
@@ -35,6 +36,17 @@ namespace CrudTest.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public async Task<IActionResult> Search(string searchString)
+        {
+            var news = from n in _context.News
+                       select n;
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                news = news.Where(s => s.Name.Contains(searchString));
+            }
+            return View("Index", await news.ToListAsync());
         }
     }
 }

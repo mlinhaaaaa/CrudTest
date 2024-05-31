@@ -1,5 +1,8 @@
-﻿@{
+﻿@model List<CrudTest.Entities.News>
+
+@{
     ViewData["Title"] = "Index";
+    var i = 0;
 }
 
 <!DOCTYPE html>
@@ -40,8 +43,8 @@
                         <div class="col-lg-1 col-xs-3 col-sm-2 col-md-2 logo "><a><img src="~/images/logo.jpg" alt=""></a></div>
                         <div class="col-lg-3 col-xs-9 col-sm-5 col-md-3 selecttopic">
                             <div class="dropdown">
-                                <a data-toggle="dropdown" onclick="toggleDropdown()" href="#">Borderlands 2</a> <b class="caret"></b>
-                                <ul class="dropdown-menu" role="menu" id="dropdownMenu" style="display:none">
+                                <a class="btn btn-primary" data-toggle="dropdown"href="#">Borderlands 2</a> <b class="caret"></b>
+                                <ul class="dropdown-menu" role="menu">
                                     <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Borderlands 1</a></li>
                                     <li role="presentation"><a role="menuitem" tabindex="-2" href="#">Borderlands 2</a></li>
                                     <li role="presentation"><a role="menuitem" tabindex="-3" href="#">Borderlands 3</a></li>
@@ -51,9 +54,9 @@
                         </div>
                         <div class="col-lg-4 search hidden-xs hidden-sm col-md-3">
                             <div class="wrap">
-                                <form action="#" method="post" class="form">
-                                    <div class="pull-left txt"><input type="text" class="form-control" placeholder="Search Topics"></div>
-                                    <div class="pull-right"><button class="btn btn-default" type="button"><i class="fa fa-search"></i></button></div>
+                                <form asp-action="Search" method="get" class="form">
+                                    <div class="pull-left txt"><input type="text" name="searchString" class="form-control" placeholder="Search by name..." /></div>
+                                    <div class="pull-right"><button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button></div>
                                     <div class="clearfix"></div>
                                 </form>
                             </div>
@@ -85,10 +88,10 @@
         <main role="main" class="pb-3">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-8 col-md-">
+                    <div class="col-lg-9 col-md-8">
                         @RenderBody()
                     </div>
-                    <div class="col-lg-4 col-md-4">
+                    <div class="col-lg-3 col-md-4">
                         <!-- -->
                         <div class="sidebarblock">
                             <h3>Categories</h3>
@@ -113,7 +116,7 @@
                                                 <td>
                                                     <div class="progress">
                                                         <div class="progress-bar color1" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 90%">
-                                                            Call of Duty Ghosts
+                                                            Blockchain
                                                         </div>
                                                     </div>
                                                 </td>
@@ -126,7 +129,7 @@
                                                 <td>
                                                     <div class="progress">
                                                         <div class="progress-bar color2" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 63%">
-                                                            Titanfall
+                                                            Quốc Hội khóa XV
                                                         </div>
                                                     </div>
                                                 </td>
@@ -139,7 +142,7 @@
                                                 <td>
                                                     <div class="progress">
                                                         <div class="progress-bar color3" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 75%">
-                                                            Battlefield 4
+                                                            Messi là GOAT
                                                         </div>
                                                     </div>
                                                 </td>
@@ -151,7 +154,7 @@
                                         </tbody>
                                     </table>
                                 </form>
-                                <p class="smal">Voting ends on 19th of October</p>
+                                <p class="smal">Voting ends on 2nd of June</p>
                             </div>
                         </div>
 

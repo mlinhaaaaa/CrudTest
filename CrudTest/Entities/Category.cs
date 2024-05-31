@@ -9,7 +9,5 @@ public partial class Category
 
     public string? Name { get; set; }
 
-    public int NewsCount { get; set; }
-
     public virtual ICollection<News> News { get; set; } = new List<News>();
 }

@@ -8,7 +8,7 @@
             foreach (var category in Model)
             {
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="News" asp-action="Category" asp-route-id="@category.Id">@category.Name<span class="badge pull-right">@category.NewsCount</span></a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="News" asp-action="Category" asp-route-id="@category.Id">@category.Name</a>
                 </li>
             }
         }

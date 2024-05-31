@@ -168,20 +168,5 @@ namespace CrudTest.Controllers
             }
             return View(category);
         }
-
-        public IActionResult NewsCount()
-        {
-            var categories = _context.Categories
-                .Include(c => c.News)
-                .Select(c => new Category
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    NewsCount = c.News.Count() > 0 ? c.News.Count() : 0
-                })
-                .ToList();
-
-            return View(categories);
-        }
     }
 }

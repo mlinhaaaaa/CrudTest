@@ -37,13 +37,15 @@
                 <td>@item.Content</td>
                 <td>@item.CategoryNavigation?.Name</td>
                 <td>
-                    <a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" onclick="CheckinData('@item.Id', '@item.Name', '@item.Content', '@item.Category')">Edit</a> ||
+                    <a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" onclick="CheckinData('@item.Id', '@item.Name', '@item.Content', '@item.Category')">Edit</a>
                     <a class="btn btn-danger" onclick="Delete('@item.Id')">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<a class="btn btn-primary" href="@Url.Action("Dashboard", "Home")">Back</a>
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
