@@ -2,15 +2,10 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "_layoutAdmin";
     var i = 0;
     var category = ViewData["Category"] as IEnumerable<CrudTest.Entities.Category>;
 }
-
-<!-- Bootstrap CSS -->
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-<!-- jQuery and Bootstrap JS -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
 
 <h1>News</h1>
 
@@ -21,7 +16,8 @@
     <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Name</th>
+            <th scope="col">Title</th>
+            <th scope="col">Image</th>
             <th scope="col">Content</th>
             <th scope="col">Category</th>
             <th scope="col">Action</th>
@@ -34,10 +30,11 @@
             <tr>
                 <th scope="row">@i</th>
                 <td>@item.Name</td>
+                <td><img src="@Url.Content(item.Image)" alt="Image" style="max-width: 150px; max-height: 150px;" /></td>
                 <td>@item.Content</td>
                 <td>@item.CategoryNavigation?.Name</td>
                 <td>
-                    <a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" onclick="CheckinData('@item.Id', '@item.Name', '@item.Content', '@item.Category')">Edit</a>
+                    <a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" onclick="CheckinData('@item.Id', '@item.Name', '@item.Image', '@item.Content', '@item.Category')">Edit</a>
                     <a class="btn btn-danger" onclick="Delete('@item.Id')">Delete</a>
                 </td>
             </tr>
@@ -45,8 +42,7 @@
     </tbody>
 </table>
 
-<a class="btn btn-primary" href="@Url.Action("Dashboard", "Home")">Back</a>
-
+<!-- Create Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -55,18 +51,22 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="newsForm" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="modal-name" class="col-form-label">Name:</label>
-                        <input type="text" class="form-control" id="modal-name">
+                        <input type="text" class="form-control" id="modal-name" name="name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="modal-image" class="col-form-label">Image:</label>
+                        <input type="file" class="form-control" id="modal-image" name="image">
                     </div>
                     <div class="mb-3">
                         <label for="modal-content" class="col-form-label">Content:</label>
-                        <textarea class="form-control" id="modal-content"></textarea>
+                        <textarea class="form-control" id="modal-content" name="content"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="modal-category" class="col-form-label">Category:</label>
-                        <select id="modal-category" class="form-control">
+                        <select id="modal-category" class="form-control" name="category">
                             @foreach (var data in category)
                             {
                                 <option value="@data.Id">@data.Name</option>
@@ -83,6 +83,7 @@
     </div>
 </div>
 
+<!-- Edit Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -91,19 +92,24 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form>
-                    <input type="hidden" class="form-control" id="modal-id-edit">
+                <form id="editForm" enctype="multipart/form-data">
+                    <input type="hidden" class="form-control" id="modal-id-edit" name="id">
                     <div class="mb-3">
                         <label for="modal-name-edit" class="col-form-label">Name:</label>
-                        <input type="text" class="form-control" id="modal-name-edit">
+                        <input type="text" class="form-control" id="modal-name-edit" name="name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="modal-image-edit" class="col-form-label">Current Image:</label><br>
+                        <img id="current-image" src="" alt="Current Image" style="max-width: 150px; max-height: 150px; margin-bottom: 10px;">
+                        <input type="file" class="form-control" id="modal-image-edit" name="image">
                     </div>
                     <div class="mb-3">
                         <label for="modal-content-edit" class="col-form-label">Content:</label>
-                        <textarea class="form-control" id="modal-content-edit"></textarea>
+                        <textarea class="form-control" id="modal-content" name="content"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="modal-category-edit" class="col-form-label">Category:</label>
-                        <select id="modal-category-edit" class="form-control">
+                        <select id="modal-category-edit" class="form-control" name="category">
                             @foreach (var data in category)
                             {
                                 <option value="@data.Id">@data.Name</option>
@@ -120,16 +126,19 @@
     </div>
 </div>
 
+
 <script>
     function PostData() {
+        var formData = new FormData($('#newsForm')[0]);
+        var content = $('#modal-content').val();
+        formData.append('content', content);
+
         $.ajax({
-            url: "/News/Create",
+            url: "/tin-tuc/tao-moi",
             type: "post",
-            data: {
-                name: $("#modal-name").val(),
-                content: $("#modal-content").val(),
-                category: $("#modal-category").val()
-            },
+            data: formData,
+            processData: false,
+            contentType: false,
             success: function (response) {
                 window.location.reload();
             },
@@ -140,15 +149,16 @@
     }
 
     function EditData() {
+        var formData = new FormData($('#editForm')[0]);
+        var content = $('#modal-content').val();
+        formData.append('content', content);
+
         $.ajax({
-            url: "/News/Edit",
+            url: "/tin-tuc/sua",
             type: "post",
-            data: {
-                id: $("#modal-id-edit").val(),
-                name: $("#modal-name-edit").val(),
-                content: $("#modal-content-edit").val(),
-                category: $("#modal-category-edit").val()
-            },
+            data: formData,
+            processData: false,
+            contentType: false,
             success: function (response) {
                 window.location.reload();
             },
@@ -160,7 +170,7 @@
 
     function Delete(id) {
         $.ajax({
-            url: "/News/Delete",
+            url: "/tin-tuc/xoa/" + id,
             type: "post",
             data: { id: id },
             success: function (response) {
@@ -172,10 +182,27 @@
         });
     }
 
-    function CheckinData(id, name, content, category) {
+    function CheckinData(id, name, image, content, category) {
         $("#modal-id-edit").val(id);
         $("#modal-name-edit").val(name);
-        $("#modal-content-edit").val(content);
+        $("#modal-content").val(content);
         $("#modal-category-edit").val(category);
+        $('#current-image').attr('src', image);
     }
+    ClassicEditor
+        .create(document.querySelector('#modal-content'), {
+            ckbox: {
+                tokenUrl: '@ViewData["Token"]',
+                theme: 'lark'
+            },
+            toolbar: [
+                'ckbox', 'imageUpload', '|', 'heading', '|', 'undo', 'redo', '|', 'bold', 'italic', '|',
+                'blockQuote', 'indent', 'link', '|', 'bulletedList', 'numberedList'
+            ],
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
 </script>
+

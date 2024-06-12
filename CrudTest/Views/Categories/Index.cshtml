@@ -1,14 +1,15 @@
 ﻿@model IEnumerable<CrudTest.Entities.Category>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Index"; 
+    Layout = "_layoutAdmin";
     var i = 0;
 }
 
 <h1>Categories</h1>
 
 <p>
-    <a class="btn btn-primary" asp-action="Create">Create New</a>
+    <a class="btn btn-primary" asp-action="tao-moi" asp-controller="danh-muc">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -29,12 +30,10 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a class="btn btn-warning" asp-action="Edit" asp-controller="Categories" asp-route-name="@(item.Name)">Edit</a>
+                    <a class="btn btn-danger" asp-action="xoa" asp-controller="danh-muc" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
-<a class="btn btn-primary" href="@Url.Action("Dashboard", "Home")">Back</a>
-

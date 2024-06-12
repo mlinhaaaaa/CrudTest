@@ -22,11 +22,8 @@ namespace CrudTest.Controllers
             return View(newsList);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
+        [Route("bang-dieu-khien")]
         public IActionResult Dashboard()
         {
             return View();
@@ -38,6 +35,7 @@ namespace CrudTest.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        [Route("tim-kiem")]
         public async Task<IActionResult> Search(string searchString)
         {
             var news = from n in _context.News
@@ -47,6 +45,29 @@ namespace CrudTest.Controllers
                 news = news.Where(s => s.Name.Contains(searchString));
             }
             return View("Index", await news.ToListAsync());
+        }
+
+        [Route("danh-muc/{name}")]
+        public async Task<IActionResult> Category(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                return NotFound();
+            }
+
+            var category = await _context.Categories.FirstOrDefaultAsync(c => c.Name == name);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            var news = await _context.News
+                .Where(n => n.Category == category.Id)
+                .Include(n => n.CategoryNavigation)
+                .ToListAsync();
+
+            ViewData["NewsofCategory"] = category;
+            return View(news);
         }
     }
 }

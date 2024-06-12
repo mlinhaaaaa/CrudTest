@@ -9,6 +9,7 @@ using CrudTest.Entities;
 
 namespace CrudTest.Controllers
 {
+    [Route("danh-muc")]
     public class CategoriesController : Controller
     {
         private readonly TestContext _context;
@@ -19,6 +20,7 @@ namespace CrudTest.Controllers
         }
 
         // GET: Categories
+        [Route("")]
         public async Task<IActionResult> Index()
         {
             var categories = await _context.Categories.ToListAsync();
@@ -28,6 +30,7 @@ namespace CrudTest.Controllers
 
 
         // GET: Categories/Create
+        [Route("tao-moi")]
         public IActionResult Create()
         {
             return View();
@@ -37,6 +40,7 @@ namespace CrudTest.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Route("tao-moi")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] Category category)
         {
@@ -51,14 +55,15 @@ namespace CrudTest.Controllers
         }
 
         // GET: Categories/Edit/5
-        public async Task<IActionResult> Edit(Guid? id)
+        [Route("sua/{name}")]
+        public async Task<IActionResult> Edit(string name)
         {
-            if (id == null)
+            if (name == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Categories.FindAsync(id);
+            var category = await _context.Categories.FirstOrDefaultAsync(c => c.Name == name);
             if (category == null)
             {
                 return NotFound();
@@ -70,10 +75,11 @@ namespace CrudTest.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Route("sua/{name}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name")] Category category)
+        public async Task<IActionResult> Edit(string name, [Bind("Id,Name")] Category category)
         {
-            if (id != category.Id)
+            if (name != category.Name)
             {
                 return NotFound();
             }
@@ -102,6 +108,7 @@ namespace CrudTest.Controllers
         }
 
         // GET: Categories/Delete/5
+        [Route("xoa/{id:guid}")]
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -121,6 +128,7 @@ namespace CrudTest.Controllers
 
         // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Route("xoa/{id:guid}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
@@ -144,18 +152,14 @@ namespace CrudTest.Controllers
             return _context.Categories.Any(e => e.Id == id);
         }
 
-
+        [Route("slidebar")]
         public IActionResult GetDataHeader()
         {
             var categories = _context.Categories.ToList();
             return PartialView("_CategoryHeader", categories);
         }
 
-        public async Task<IActionResult> GetNewsByCategory(Guid categoryId)
-        {
-            var news = await _context.News.Where(n => n.Category == categoryId).ToListAsync();
-            return PartialView("_NewsList", news);
-        }
+        [Route("tin-tuc/{id:int}")]
         public IActionResult Category(int id)
         {
             var categoryId = id.ToString();
