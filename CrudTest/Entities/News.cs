@@ -15,6 +15,7 @@ public partial class News
     public Guid? Category { get; set; }
 
     public bool IsDeleted { get; set; }
+    public DateTime CreatedAt { get; set; }
 
     public virtual Category? CategoryNavigation { get; set; }
 }

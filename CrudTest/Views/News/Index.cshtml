@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<CrudTest.Entities.News>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "News";
     Layout = "_layoutAdmin";
     var i = 0;
     var category = ViewData["Category"] as IEnumerable<CrudTest.Entities.Category>;
@@ -10,7 +10,7 @@
 <h1>News</h1>
 
 <p>
-    <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Create New</a>
+    <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fas fa-plus"></i></a>
 </p>
 <table class="table">
     <thead>
@@ -24,19 +24,28 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @if (Model != null && Model.Any())
         {
-            i++;
+            @foreach (var item in Model)
+            {
+                i++;
+                <tr>
+                    <th scope="row">@i</th>
+                    <td>@item.Name</td>
+                    <td><img src="@Url.Content(item.Image)" alt="Image" style="max-width: 150px; max-height: 150px;" /></td>
+                    <td>@item.Content</td>
+                    <td>@item.CategoryNavigation?.Name</td>
+                    <td>
+                        <a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" onclick="CheckinData('@item.Id', '@item.Name', '@item.Image', '@item.Content', '@item.Category')"><i class="fas fa-edit"></i></a>
+                        <a class="btn btn-danger" onclick="Delete('@item.Id')"><i class="fas fa-trash-alt"></i></a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
             <tr>
-                <th scope="row">@i</th>
-                <td>@item.Name</td>
-                <td><img src="@Url.Content(item.Image)" alt="Image" style="max-width: 150px; max-height: 150px;" /></td>
-                <td>@item.Content</td>
-                <td>@item.CategoryNavigation?.Name</td>
-                <td>
-                    <a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" onclick="CheckinData('@item.Id', '@item.Name', '@item.Image', '@item.Content', '@item.Category')">Edit</a>
-                    <a class="btn btn-danger" onclick="Delete('@item.Id')">Delete</a>
-                </td>
+                <td colspan="6" class="text-center">No news available</td>
             </tr>
         }
     </tbody>
@@ -67,17 +76,24 @@
                     <div class="mb-3">
                         <label for="modal-category" class="col-form-label">Category:</label>
                         <select id="modal-category" class="form-control" name="category">
-                            @foreach (var data in category)
+                            @if (category != null && category.Any())
                             {
-                                <option value="@data.Id">@data.Name</option>
+                                @foreach (var data in category)
+                                {
+                                    <option value="@data.Id">@data.Name</option>
+                                }
+                            }
+                            else
+                            {
+                                <option value="">No categories available</option>
                             }
                         </select>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" onclick="PostData()" class="btn btn-primary">Create</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i></button>
+                <button type="button" onclick="PostData()" class="btn btn-primary"><i class="fas fa-check"></i></button>
             </div>
         </div>
     </div>
@@ -105,104 +121,132 @@
                     </div>
                     <div class="mb-3">
                         <label for="modal-content-edit" class="col-form-label">Content:</label>
-                        <textarea class="form-control" id="modal-content" name="content"></textarea>
+                        <textarea class="form-control" id="modal-content-edit" name="content"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="modal-category-edit" class="col-form-label">Category:</label>
                         <select id="modal-category-edit" class="form-control" name="category">
-                            @foreach (var data in category)
+                            @if (category != null && category.Any())
                             {
-                                <option value="@data.Id">@data.Name</option>
+                                @foreach (var data in category)
+                                {
+                                    <option value="@data.Id">@data.Name</option>
+                                }
+                            }
+                            else
+                            {
+                                <option value="">No categories available</option>
                             }
                         </select>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" onclick="EditData()" class="btn btn-primary">Edit</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i></button>
+                <button type="button" onclick="EditData()" class="btn btn-primary"><i class="fas fa-check"></i></button>
             </div>
         </div>
     </div>
 </div>
 
+@section Scripts {
+    <script>
+        function PostData() {
+            var formData = new FormData($('#newsForm')[0]);
+            var content = $('#modal-content').val();
+            formData.append('content', content);
 
-<script>
-    function PostData() {
-        var formData = new FormData($('#newsForm')[0]);
-        var content = $('#modal-content').val();
-        formData.append('content', content);
+            $.ajax({
+                url: "/tin-tuc/tao-moi",
+                type: "post",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    window.location.reload();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+        }
 
-        $.ajax({
-            url: "/tin-tuc/tao-moi",
-            type: "post",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                window.location.reload();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(textStatus, errorThrown);
-            }
+        function EditData() {
+            var formData = new FormData($('#editForm')[0]);
+            var content = $('#modal-content-edit').val();
+            formData.append('content', content);
+
+            $.ajax({
+                url: "/tin-tuc/sua",
+                type: "post",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    window.location.reload();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+        }
+
+        function Delete(id) {
+            $.ajax({
+                url: "/tin-tuc/xoa/" + id,
+                type: "post",
+                data: { id: id },
+                success: function (response) {
+                    window.location.reload();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+        }
+
+        function CheckinData(id, name, image, content, category) {
+            $("#modal-id-edit").val(id);
+            $("#modal-name-edit").val(name);
+            $("#modal-content-edit").val(content);
+            $("#modal-category-edit").val(category);
+            $('#current-image').attr('src', image);
+        }
+
+        $(document).ready(function () {
+            $('#exampleModal').on('shown.bs.modal', function () {
+                ClassicEditor
+                    .create(document.querySelector('#modal-content'), {
+                        ckbox: {
+                            tokenUrl: '@ViewData["Token"]',
+                            theme: 'lark'
+                        },
+                        toolbar: [
+                            'ckbox', 'imageUpload', '|', 'heading', '|', 'undo', 'redo', '|', 'bold', 'italic', '|',
+                            'blockQuote', 'indent', 'link', '|', 'bulletedList', 'numberedList'
+                        ],
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            });
+
+            $('#editModal').on('shown.bs.modal', function () {
+                ClassicEditor
+                    .create(document.querySelector('#modal-content-edit'), {
+                        ckbox: {
+                            tokenUrl: '@ViewData["Token"]',
+                            theme: 'lark'
+                        },
+                        toolbar: [
+                            'ckbox', 'imageUpload', '|', 'heading', '|', 'undo', 'redo', '|', 'bold', 'italic', '|',
+                            'blockQuote', 'indent', 'link', '|', 'bulletedList', 'numberedList'
+                        ],
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            });
         });
-    }
-
-    function EditData() {
-        var formData = new FormData($('#editForm')[0]);
-        var content = $('#modal-content').val();
-        formData.append('content', content);
-
-        $.ajax({
-            url: "/tin-tuc/sua",
-            type: "post",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                window.location.reload();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(textStatus, errorThrown);
-            }
-        });
-    }
-
-    function Delete(id) {
-        $.ajax({
-            url: "/tin-tuc/xoa/" + id,
-            type: "post",
-            data: { id: id },
-            success: function (response) {
-                window.location.reload();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(textStatus, errorThrown);
-            }
-        });
-    }
-
-    function CheckinData(id, name, image, content, category) {
-        $("#modal-id-edit").val(id);
-        $("#modal-name-edit").val(name);
-        $("#modal-content").val(content);
-        $("#modal-category-edit").val(category);
-        $('#current-image').attr('src', image);
-    }
-    ClassicEditor
-        .create(document.querySelector('#modal-content'), {
-            ckbox: {
-                tokenUrl: '@ViewData["Token"]',
-                theme: 'lark'
-            },
-            toolbar: [
-                'ckbox', 'imageUpload', '|', 'heading', '|', 'undo', 'redo', '|', 'bold', 'italic', '|',
-                'blockQuote', 'indent', 'link', '|', 'bulletedList', 'numberedList'
-            ],
-        })
-        .catch(error => {
-            console.error(error);
-        });
-
-</script>
-
+    </script>
+}
