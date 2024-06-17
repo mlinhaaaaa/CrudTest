@@ -29,10 +29,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
-                    <a class="btn btn-warning" asp-action="Edit" asp-controller="Categories" asp-route-name="@(item.Name)">Edit</a>
-                    <a class="btn btn-danger" asp-action="xoa" asp-controller="danh-muc" asp-route-id="@item.Id">Delete</a>
-            </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" title="Details">
+                        <i class="fas fa-info-circle"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" title="Delete">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
         </tr>
 }
     </tbody>

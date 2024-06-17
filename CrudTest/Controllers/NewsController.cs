@@ -18,7 +18,7 @@ namespace CrudTest.Controllers
         [Route("")]
         public IActionResult Index()
         {
-            var data = _context.News.Include(i => i.CategoryNavigation).ToList();
+            var data = _context.News.Include(i => i.CategoryNavigation).OrderByDescending(n => n.CreatedAt).ToList();
             ViewData["Category"] = _context.Categories.ToList();
             var tokenUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}/token";
             ViewData["Token"] = tokenUrl;
@@ -43,7 +43,8 @@ namespace CrudTest.Controllers
                     Id = Guid.NewGuid(),
                     Name = name,
                     Content = content,
-                    Category = category
+                    Category = category,
+                    CreatedAt = DateTime.UtcNow
                 };
 
                 _context.News.Add(newsEntry);

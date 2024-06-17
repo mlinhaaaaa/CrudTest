@@ -158,19 +158,5 @@ namespace CrudTest.Controllers
             var categories = _context.Categories.ToList();
             return PartialView("_CategoryHeader", categories);
         }
-
-        [Route("tin-tuc/{id:int}")]
-        public IActionResult Category(int id)
-        {
-            var categoryId = id.ToString();
-            var category = _context.Categories
-                .Include(c => c.News)
-                .FirstOrDefault(c => c.Id.ToString() == categoryId);
-            if (category == null)
-            {
-                return NotFound();
-            }
-            return View(category);
-        }
     }
 }
